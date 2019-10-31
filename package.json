@@ -1,0 +1,26 @@
+{
+  "name": "era-835",
+  "version": "0.0.1",
+  "description": "Extremely basic X12 835 file parser. Use at your own risk",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jinger89/era.git"
+  },
+  "keywords": [
+    "era",
+    "x12",
+    "835",
+    "edi",
+    "sadistic"
+  ],
+  "author": "Jing Tao Liu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jinger89/era/issues"
+  },
+  "homepage": "https://github.com/jinger89/era#readme"
+}
