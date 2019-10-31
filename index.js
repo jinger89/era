@@ -18,6 +18,13 @@ Object.defineProperty(String.prototype, 'toYMD', {
     }
 });
 
+// returns the contents of a file as a string
+function readFile (path) {
+    return fs.readFileSync(path, 'utf8')
+        .split('~')
+        .map(line => line.split('*'));
+}
+
 // returns the first line with the given prefix
 function getLine (lines, prefix, modifier = null) {
     for (var i = 0; i < lines.length; i++)
@@ -52,15 +59,15 @@ function countLines (lines, prefix, modifier = null) {
     return count;
 }
 
-// returns the start and end indices of a range that matches the prefix and term
-function getRangeIndices (lines, prefix, term) {
+// returns the start and end indices of a range that matches the start and end
+function getRangeIndices (lines, start, end) {
     var i = -1;
     var j = -1;
     
     for (i = 0; i < lines.length; i++) {
-        if (lines[i][0] == prefix) {
+        if (lines[i][0] == start) {
             for (j = i + 1; j < lines.length; j++) {
-                if (lines[j][0] == term)
+                if (lines[j][0] == end)
                     return [i, j];
             }
             
@@ -71,16 +78,16 @@ function getRangeIndices (lines, prefix, term) {
     return [ i, j ];
 }
 
-// returns an array of lines that starts with the first instance of the prefix and ends when term is found or when eof is reached
-function getRange (lines, prefix, term) {
-    var range = getRangeIndices(lines, prefix, term);
+// returns an array of lines that starts with the first instance of the start and ends when end is found or when eof is reached
+function getRange (lines, start, end) {
+    var range = getRangeIndices(lines, start, end);
     
     return range[0] == -1 ? [] : lines.slice(range[0], range[1]);
 }
 
-// like getRange, but keeps searching for more ranges that match the given prefix and term or until eof is returned
-function getRanges (lines, prefix, term) {
-    var first = getRangeIndices(lines, prefix, term);
+// like getRange, but keeps searching for more ranges that match the given start and end or until eof is returned
+function getRanges (lines, start, end) {
+    var first = getRangeIndices(lines, start, end);
     var result = [ first ];
     var count = 0;
     
@@ -90,7 +97,7 @@ function getRanges (lines, prefix, term) {
     while (result[result.length - 1][1] < lines.length - 1) {
         var step = result[result.length - 1][1];
         var chunk = lines.slice(step);
-        var range = getRangeIndices(chunk, prefix, term);
+        var range = getRangeIndices(chunk, start, end);
         
         if (range[0] == -1)
             break;
@@ -175,11 +182,12 @@ function getClaims (lines) {
     };
 }
 
-var parseFile = file => getClaims(fs.readFileSync(file, 'utf8').split('~').map(line => line.split('*')));
-var parseFiles = files => files.map(parseFile);
+var parseFile = path => getClaims(readFile(path));
+var parseFiles = paths => paths.map(parseFile);
 
 module.exports = {
     util: {
+        readFile,
         getLine,
         getLines,
         getRangeIndices,
