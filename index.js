@@ -21,6 +21,7 @@ Object.defineProperty(String.prototype, 'toYMD', {
 // returns the contents of a file as a string
 function readFile (path) {
     return fs.readFileSync(path, 'utf8')
+        .replace(/\n|\r/ig, '')
         .split('~')
         .map(line => line.split('*'));
 }

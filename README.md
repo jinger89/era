@@ -6,7 +6,7 @@ If you are reading this, you are probably in search of a simple answer/parser fo
 
 I understand your pain. Trust me, I do.
 
-This package is the result of my pain and frustration. It is my attempt at understanding this format starting with little to no knowledge, armed only Google and about 3 poorly written and incomplete pieces of "documentation" from insurance websites where I've gleamed enough to finish my own project.
+This package is the result of my pain and frustration. It is my attempt at understanding this format starting with little to no knowledge, armed with only Google and about 3 poorly written and incomplete pieces of "documentation" from insurance websites where I've gleaned enough to finish my own project.
 
 I hope this package can offer you some relief and is able to get you where you need to go. But please, read the __EXTREME DISCLAIMERS__ below to understand what you are about to use.
 
