@@ -18,12 +18,16 @@ Object.defineProperty(String.prototype, 'toYMD', {
     }
 });
 
-// returns the contents of a file as a string
-function readFile (path) {
-    return fs.readFileSync(path, 'utf8')
-        .replace(/\n|\r/ig, '')
+// splits a string (file content) into it's component lines
+function splitString (str) {
+    return str.replace(/\n|\r/ig, '')
         .split('~')
         .map(line => line.split('*'));
+}
+
+// returns the contents of a file as a string
+function readFile (path) {
+    return splitString(fs.readFileSync(path, 'utf8'));
 }
 
 // returns the first line with the given prefix
@@ -185,9 +189,11 @@ function getClaims (lines) {
 
 var parseFile = path => getClaims(readFile(path));
 var parseFiles = paths => paths.map(parseFile);
+var parseString = str => getClaims(splitString(str));
 
 module.exports = {
     util: {
+        splitString,
         readFile,
         getLine,
         getLines,
@@ -197,5 +203,6 @@ module.exports = {
         getClaims
     },
     parseFile,
-    parseFiles
+    parseFiles,
+    parseString
 };
