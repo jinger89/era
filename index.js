@@ -128,7 +128,7 @@ function getClaims (lines) {
     if (!bpr || !trn || !n1)
         return {};
     
-    var date = dtm[4]; date = [ date.substr(0,4), date.substr(4,2), date.substr(6,) ].join('-');
+    var date = dtm[2]; date = [ date.substr(0,4), date.substr(4,2), date.substr(6,) ].join('-');
     var amount = bpr[2].to$();
     var action = codes.check[bpr[3]] ;
     var method = bpr[4];
