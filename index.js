@@ -120,16 +120,15 @@ function getRanges (lines, start, end) {
 function getClaims (lines) {
     
     // get check information
-    var gs = getLine(lines, 'GS');
     var bpr = getLine(lines, 'BPR');
     var trn = getLine(lines, 'TRN');
+    var dtm = getLine(lines, 'DTM', '405');
     var n1 = getLine(lines, 'N1', 'PR');
     
     if (!bpr || !trn || !n1)
         return {};
     
-    var payor = gs[2];
-    var date = gs[4]; date = [ date.substr(0,4), date.substr(4,2), date.substr(6,) ].join('-');
+    var date = dtm[4]; date = [ date.substr(0,4), date.substr(4,2), date.substr(6,) ].join('-');
     var amount = bpr[2].to$();
     var action = codes.check[bpr[3]] ;
     var method = bpr[4];
