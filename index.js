@@ -136,7 +136,7 @@ function getClaims (lines) {
     var company = n1[2];
     var claims = countLines(lines, 'CLP');
     var services = countLines(lines, 'SVC');
-    var check = { payor, date, amount, action, method, company, number, claims, services };
+    var check = { date, amount, action, method, company, number, claims, services };
 
     // get claims
     var claims = getRanges(lines, 'CLP', 'CLP').map(range => {
