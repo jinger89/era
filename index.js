@@ -120,6 +120,7 @@ function getRanges (lines, start, end) {
 function getClaims (lines) {
     
     // get check information
+    var gs = getLine(lines, 'GS');
     var bpr = getLine(lines, 'BPR');
     var trn = getLine(lines, 'TRN');
     var n1 = getLine(lines, 'N1', 'PR');
@@ -127,6 +128,8 @@ function getClaims (lines) {
     if (!bpr || !trn || !n1)
         return {};
     
+    var payor = gs[2];
+    var date = gs[4]; date = [ date.substr(0,4), date.substr(4,2), date.substr(6,) ].join('-');
     var amount = bpr[2].to$();
     var action = codes.check[bpr[3]] ;
     var method = bpr[4];
@@ -134,7 +137,7 @@ function getClaims (lines) {
     var company = n1[2];
     var claims = countLines(lines, 'CLP');
     var services = countLines(lines, 'SVC');
-    var check = { amount, action, method, company, number, claims, services };
+    var check = { payor, date, amount, action, method, company, number, claims, services };
 
     // get claims
     var claims = getRanges(lines, 'CLP', 'CLP').map(range => {
