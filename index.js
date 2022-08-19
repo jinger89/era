@@ -145,7 +145,8 @@ function getClaims (lines) {
         var status = [ clp ? clp[2] : null, clp ? codes.claim[clp[2]][0] : null ];
         var payment = clp ? clp[4].to$() : null;
         var claimNumber = clp ? clp[7] : null;
-        var dateReceived = getLine(range, 'DTM', '050')[2].toYMD();
+        var dateLine = getLine(range, 'DTM', '050');
+        var dateReceived = dateLine ? dateLine[2].toYMD() : null;
         var pt = getLine(range, 'NM1', 'QC');
         var pr = getLine(range, 'NM1', '82');
         
@@ -166,7 +167,7 @@ function getClaims (lines) {
             var dos = getLine(serviceRange, 'DTM', '472')[2].toYMD();
             var cpt = svc ? svc[1].split(':')[1] : null;
             var units = svc ? parseInt(svc[4] || 1) : null;
-            var payment = svn ? svc[3].to$() : null;
+            var payment = svc ? svc[3].to$() : null;
             var remarks = getLines(serviceRange, 'CAS').map(rr => {
                 return [
                     rr ? [ rr[1], rr[2] ].join('-') : null,
