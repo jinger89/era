@@ -1,6 +1,6 @@
 {
   "name": "era-835",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Extremely basic X12 835 file parser. Use at your own risk",
   "main": "index.js",
   "scripts": {
