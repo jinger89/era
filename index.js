@@ -141,38 +141,38 @@ function getClaims (lines) {
     // get claims
     var claims = getRanges(lines, 'CLP', 'CLP').map(range => {
         var clp = getLine(range, 'CLP');
-        var id = clp[1];
-        var status = [ clp[2], codes.claim[clp[2]][0] ];
-        var payment = clp[4].to$();
-        var claimNumber = clp[7];
+        var id = clp ? clp[1] : null;
+        var status = [ clp ? clp[2] : null, clp ? codes.claim[clp[2]][0] : null ];
+        var payment = clp ? clp[4].to$() : null;
+        var claimNumber = clp ? clp[7] : null;
         var dateReceived = getLine(range, 'DTM', '050')[2].toYMD();
         var pt = getLine(range, 'NM1', 'QC');
         var pr = getLine(range, 'NM1', '82');
         
         var patient = {
-            firstName: pt[4],
-            lastName: pt[3],
-            policyNumber: pt[9]
+            firstName: pt ? pt[4] : null,
+            lastName: pt ? pt[3] : null,
+            policyNumber: pt ? pt[9] : null
         };
         
         var provider = {
-            firstName: pr[4],
-            lastName: pr[3],
-            npi: pr[9]
+            firstName: pr ? pr[4] : null,
+            lastName: pr ? pr[3] : null,
+            npi: pr ? pr[9] : null
         };
         
         var services = getRanges(range, 'SVC', 'SVC').map(serviceRange => {
             var svc = getLine(serviceRange, 'SVC');
             var dos = getLine(serviceRange, 'DTM', '472')[2].toYMD();
-            var cpt = svc[1].split(':')[1];
-            var units = parseInt(svc[4] || 1);
-            var payment = svc[3].to$();
+            var cpt = svc ? svc[1].split(':')[1] : null;
+            var units = svc ? parseInt(svc[4] || 1) : null;
+            var payment = svn ? svc[3].to$() : null;
             var remarks = getLines(serviceRange, 'CAS').map(rr => {
                 return [
-                    [ rr[1], rr[2] ].join('-'),
-                    codes.group[rr[1]],
-                    codes.adjustment[rr[2]],
-                    rr[3]
+                    rr ? [ rr[1], rr[2] ].join('-') : null,
+                    rr ? codes.group[rr[1]] : null,
+                    rr ? codes.adjustment[rr[2]] : null,
+                    rr ? rr[3] : null
                 ];
                 
             });
