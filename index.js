@@ -25,7 +25,7 @@ function splitString (str) {
         .map(line => line.split('*'));
 }
 
-// returns the contents of a file as a string
+// returns the contents of a file as an array of lines
 function readFile (path) {
     return splitString(fs.readFileSync(path, 'utf8'));
 }
@@ -104,13 +104,14 @@ function getRanges (lines, start, end) {
         var chunk = lines.slice(step);
         var range = getRangeIndices(chunk, start, end);
         
-        if (range[0] == -1)
+        if (range[0] == -1 || range[1] == -1)
             break;
         
         range[0] += step;
         range[1] += step;
         
         result.push(range);
+        count++;
     }
     
     return result.map(range => lines.slice(range[0], range[1]));
@@ -184,15 +185,30 @@ function getClaims (lines) {
         return { id, status, payment, claimNumber, dateReceived, patient, provider, services };
     });
     
+    // get adjustments
+    var adjustments = getLines(lines, 'PLB').map(line => {
+        var note = line[3];
+        var amount = line[4].to$();
+        
+        return [ note, amount ];
+    });
+    
     return {
         check,
-        claims
+        claims,
+        adjustments
     };
 }
 
-var parseFile = path => getClaims(readFile(path));
+// returns an array of checks and claims
+function getChecks (lines) {
+    return getRanges(lines, 'ST', 'SE')
+        .map(getClaims);
+}
+
+var parseFile = path => getChecks(readFile(path));
 var parseFiles = paths => paths.map(parseFile);
-var parseString = str => getClaims(splitString(str));
+var parseString = str => getChecks(splitString(str));
 
 module.exports = {
     util: {
@@ -203,7 +219,8 @@ module.exports = {
         getRangeIndices,
         getRange,
         getRanges,
-        getClaims
+        getClaims,
+        getChecks
     },
     parseFile,
     parseFiles,
