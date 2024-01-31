@@ -123,7 +123,7 @@ function getClaims (lines) {
     // get check information
     var bpr = getLine(lines, 'BPR');
     var trn = getLine(lines, 'TRN');
-    var dtm = getLine(lines, 'DTM', '405');
+    var dtm = getLine(lines, 'DTM', '405'); dtm = dtm ? dtm : getLine(lines, 'DTM', '472');
     var n1 = getLine(lines, 'N1', 'PR');
     
     if (!bpr || !trn || !n1)
