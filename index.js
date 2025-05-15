@@ -129,7 +129,7 @@ function getClaims (lines) {
     if (!bpr || !trn || !n1)
         return {};
     
-    var date = dtm[2]; date = [ date.substr(0,4), date.substr(4,2), date.substr(6,) ].join('-');
+    var date = dtm[2]; date = [ date.substr(0,4), date.substr(4,2), date.substr(6) ].join('-');
     var amount = bpr[2].to$();
     var action = codes.check[bpr[3]] ;
     var method = bpr[4];
@@ -148,6 +148,9 @@ function getClaims (lines) {
         var claimNumber = clp ? clp[7] : null;
         var dateLine = getLine(range, 'DTM', '050');
         var dateReceived = dateLine ? dateLine[2].toYMD() : null;
+        var dateStart = getLine(range, 'DTM', '232'); dateStart = dateStart && dateStart[2] ? dateStart[2].toYMD() : null;
+        var dateEnd = getLine(range, 'DTM', '233'); dateEnd = dateEnd && dateEnd[2] ? dateEnd[2].toYMD() : null;
+        var dateAdmit = getLine(range, 'DTM', '405'); dateAdmit = dateAdmit && dateAdmit[2] ? dateAdmit[2].toYMD() : null;
         var pt = getLine(range, 'NM1', 'QC');
         var pr = getLine(range, 'NM1', '82');
         
@@ -164,8 +167,13 @@ function getClaims (lines) {
         };
         
         var services = getRanges(range, 'SVC', 'SVC').map(serviceRange => {
+            var dos472 = getLine(serviceRange, 'DTM', '472'); // service date
+            var dos232 = getLine(serviceRange, 'DTM', '232'); // dos start
+            var dos233 = getLine(serviceRange, 'DTM', '233'); // dos end
+            var dos405 = getLine(serviceRange, 'DTM', '405'); // admission date
+            var dos = dos472 || dos232 || dos233 || dos405 || dateStart || dateEnd || dateAdmit || '0000-00-00';
+            
             var svc = getLine(serviceRange, 'SVC');
-            var dos = getLine(serviceRange, 'DTM', '472')[2].toYMD();
             var cpt = svc ? svc[1].split(':')[1] : null;
             var units = svc ? parseInt(svc[4] || 1) : null;
             var payment = svc ? svc[3].to$() : null;
