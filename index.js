@@ -167,10 +167,10 @@ function getClaims (lines) {
         };
         
         var services = getRanges(range, 'SVC', 'SVC').map(serviceRange => {
-            var dos472 = getLine(serviceRange, 'DTM', '472'); // service date
-            var dos232 = getLine(serviceRange, 'DTM', '232'); // dos start
-            var dos233 = getLine(serviceRange, 'DTM', '233'); // dos end
-            var dos405 = getLine(serviceRange, 'DTM', '405'); // admission date
+            var dos472 = getLine(serviceRange, 'DTM', '472'); dos472 = dos472 && dos472[2] ? dos472[2].toYMD() : null; // service date
+            var dos232 = getLine(serviceRange, 'DTM', '232'); dos232 = dos232 && dos232[2] ? dos232[2].toYMD() : null; // dos start
+            var dos233 = getLine(serviceRange, 'DTM', '233'); dos233 = dos233 && dos233[2] ? dos233[2].toYMD() : null; // dos end
+            var dos405 = getLine(serviceRange, 'DTM', '405'); dos405 = dos405 && dos405[2] ? dos405[2].toYMD() : null; // admission date
             var dos = dos472 || dos232 || dos233 || dos405 || dateStart || dateEnd || dateAdmit || '0000-00-00';
             
             var svc = getLine(serviceRange, 'SVC');
